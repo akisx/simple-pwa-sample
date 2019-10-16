@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { Memos } from '../types'
 import { MemoList } from './MemoList'
-import { saveMemo, getMemos } from '../database'
+import { saveMemo, getMemos, deleteMemo } from '../database'
 import { MutlilineInput } from './MultilinInput'
 
 const MemoContainer = () => {
@@ -33,6 +33,16 @@ const MemoContainer = () => {
     [memos, setValue, value]
   )
 
+  const handleDelete = useCallback(
+    (id: number) => {
+      deleteMemo(id)
+
+      const nextMemos = [...memos].filter(v => v.id !== id)
+      setMemos(nextMemos)
+    },
+    [memos]
+  )
+
   useEffect(() => {
     const loadMemos = async () => {
       const savedMemos = await getMemos()
@@ -48,7 +58,7 @@ const MemoContainer = () => {
       {loaded && (
         <>
           <MutlilineInput value={value} onChange={handleChange} onKeyDown={handleKeyDown} />
-          <MemoList memos={memos} />
+          <MemoList memos={memos} onClickDeleteItem={handleDelete} />
         </>
       )}
     </div>

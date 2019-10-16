@@ -24,3 +24,8 @@ export const saveMemo = async (memo: UnsavedMemo): Promise<Memo> => {
 export const getMemos = async (): Promise<Memos> => {
   return memoTable.toArray(memos => memos.map(memo => memo as Memo))
 }
+
+export const deleteMemo = async (id: number): Promise<void> => {
+  await memoTable.delete(id)
+  return
+}
